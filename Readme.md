@@ -174,7 +174,7 @@ SectionA_G1_Rapido_Ride_Analysis/
 
 **Declaration:** We confirm that the above contribution details are accurate and verifiable through GitHub Insights, PR history, and submitted artifacts.
 
-**Team Lead Name:** Nipun Patlori  
+**Team Lead Name:** Aniket Pathak
 **Date:** April 20, 2026
 
 ## Academic Integrity
