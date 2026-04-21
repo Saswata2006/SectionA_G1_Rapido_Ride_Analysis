@@ -15,13 +15,13 @@ Newton School of Technology | Data Visualization & Analytics | Capstone 2
 ## Team Members
 | Role | Name | GitHub Username |
 | :--- | :--- | :--- |
-| **Project Lead** | Nipun Patlori | nipun1803 |
-| **Data Lead** | Aniket Pathak | Aniket-bit7 |
-| **ETL Lead** | Vedant Madne | vedant-valid |
+| **Project Lead** | Aniket Pathak | Aniket-bit7 |
+| **Data Lead** | Nipun Patlori | nipun1803 |
+| **ETL Lead** | Saswataduity Bhuin | Saswata2006 |
 | **Analysis Lead** | Akshay Y | Akkii71 |
-| **Visualization Lead** | Saswataduity Bhuin | — |
-| **Strategy Lead** | Sayan Bhattacharya | — |
-| **PPT and Quality Lead** | Narendra Singh | codernsingh |
+| **Visualization Lead** | Narendra Singh  | Narendra Singh  |
+| **Strategy Lead** | Sayan Bhattacharya | SayAn1-dls |
+| **PPT and Quality Lead** | Vedant Madne | vedant-valid |
 
 ## Business Problem
 Ride-hailing platforms like Rapido face a persistent operational challenge: balancing rider demand with driver supply across different service types and time windows. High cancellation rates erode customer trust, reduce revenue, and signal inefficiencies in resource allocation. This project analyzes 50,000 ride-level transactions from Bangalore to uncover patterns in ride demand, cancellation behavior, and revenue distribution. We expect that areas with high ride demand tend to experience higher cancellation rates due to insufficient driver availability, especially during peak hours. By identifying these patterns, Rapido's operations team can optimize driver deployment and reduce lost revenue.
@@ -37,11 +37,11 @@ The cleaning process was designed to transform raw ride-level transactional data
 
 Key steps included:
 1. **Missing Value Handling (Business-Logic Driven)**: Cancelled rides naturally have no fare or payment data. Instead of dropping these rows, we set `ride_charge`, `misc_charge`, and `total_fare` to `0` and `payment_method` to `"Not Applicable"`. For completed rides, `total_fare` was recalculated as `ride_charge + misc_charge` to fix inconsistencies.
-2. **Datetime Conversion**: The `date` and `time` columns were converted from raw strings to proper `datetime64` types, enabling time-series analysis, hour-level grouping, and day-of-week segmentation.
+2. **Datetime Conversion**: The `date` column was converted to `datetime64`. A new `time_stamp` column was created by combining source date and time strings for unified analysis.
 3. **Duplicate Removal**: Duplicate records were removed by deduplicating on `ride_id`, keeping only the first occurrence.
 4. **Categorical Standardization**: All text columns (`services`, `ride_status`, `payment_method`, `source`, `destination`) were lowercased and stripped. Service names were normalized (e.g., `bike lite` → `bike_lite`, `cab economy` → `cab_economy`).
-5. **Anomaly Filtering**: Computed `avg_speed_kmh` and dropped completed rides with physically implausible speeds (> 120 km/h), zero distance, or zero duration — removing 2,003 anomalous records.
-6. **Feature Engineering**: Created 13 new analytical columns including `revenue`, `year`, `month`, `day`, `hour`, `day_of_week`, `peak_hour`, `completed`, `is_weekend`, `avg_speed_kmh`, `fare_per_km`, and `ride_efficiency`.
+5. **Anomaly Filtering**: Dropped completed rides with physically implausible conditions: distance > 100km, distance <= 0km, or duration <= 0min.
+6. **Feature Engineering**: Created new analytical columns including `total_fare`, `year`, `month`, `hour`, `day_of_week`, `peak_hour`, `completed`, `is_weekend`, `avg_speed_kmh`, `fare_per_km`, and `ride_efficiency`.
 
 For the full implementation, see `notebooks/01_extraction.ipynb` and `notebooks/02_cleaning.ipynb`.
 
@@ -50,9 +50,9 @@ For the full implementation, see `notebooks/01_extraction.ipynb` and `notebooks/
 | :--- | :--- |
 | **Source Name** | Bangalore Rapido Ride Data (Simulated) |
 | **Row Count (Raw)** | 50,000 |
-| **Row Count (Cleaned)** | 47,997 |
+| **Row Count (Cleaned)** | 50,000 |
 | **Column Count (Raw)** | 13 |
-| **Column Count (Cleaned)** | 26 |
+| **Column Count (Cleaned)** | 24 |
 | **Time Period Covered** | June 2024 to August 2024 |
 | **Format** | CSV |
 
@@ -60,9 +60,9 @@ For the full implementation, see `notebooks/01_extraction.ipynb` and `notebooks/
 | Column Name | Description | Role in Analysis |
 | :--- | :--- | :--- |
 | `ride_status` | Whether the ride was completed or cancelled | **Target Variable** (KPI 1 — Cancellation Rate) |
-| `total_fare` / `revenue` | Total fare charged for a completed ride | **Target Variable** (KPI 2 — Revenue) |
+| `total_fare` | Total revenue charged for a completed ride | **Target Variable** (KPI 2 — Revenue) |
 | `services` | Type of Rapido service (auto, bike, bike_lite, cab_economy, parcel) | Segmentation / Filter |
-| `hour` | Hour of the day extracted from timestamp | Peak demand identification |
+| `hour` | Hour of the day extracted from `time_stamp` | Peak demand identification |
 | `source` / `destination` | Pickup and drop-off locations in Bangalore | Geographic demand analysis |
 | `duration` | Ride duration in minutes | Operational efficiency |
 | `distance` | Ride distance in kilometres | Fare and efficiency analysis |
@@ -73,7 +73,7 @@ For the full implementation, see `notebooks/01_extraction.ipynb` and `notebooks/
 | KPI | Definition | Formula / Computation |
 | :--- | :--- | :--- |
 | **Ride Cancellation Rate (%)** | Percentage of rides cancelled out of total rides booked | `(Count of rides with ride_status = 'cancelled') / (Total Rides) * 100` |
-| **Average Revenue per Ride (₹)** | Average fare earned per completed ride | `Sum(revenue where ride_status = 'completed') / Count(completed rides)` |
+| **Average Revenue per Ride (₹)** | Average fare earned per completed ride | `Sum(total_fare where ride_status = 'completed') / Count(completed rides)` |
 
 ## Tableau Dashboard
 *Detailed Tableau link and screenshots will be added in Phase 2.*
@@ -105,7 +105,8 @@ SectionA_G1_Rapido_Ride_Analysis/
 |-- docs/
 |   `-- data_dictionary.md
 |-- DVA-oriented-Resume/
-`-- DVA-focused-Portfolio/
+|-- DVA-focused-Portfolio/
+|-- venv/                          # Virtual environment
 ```
 
 ## Tech Stack
@@ -135,7 +136,7 @@ SectionA_G1_Rapido_Ride_Analysis/
 - [X] `data/processed/` contains the cleaned pipeline output
 - [ ] `tableau/screenshots/` contains dashboard screenshots
 - [ ] `tableau/dashboard_links.md` contains the Tableau Public URL
-- [ ] `docs/data_dictionary.md` is complete
+- [x] `docs/data_dictionary.md` is complete
 - [x] `README.md` explains the project, dataset, and team
 - [x] All members have visible commits and pull requests
 
@@ -164,18 +165,18 @@ SectionA_G1_Rapido_Ride_Analysis/
 ## Contribution Matrix
 | Team Member | Dataset & Sourcing | ETL & Cleaning | EDA & Analysis | Statistical Analysis | Tableau Dashboard | Report Writing | PPT & Viva |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Nipun Patlori** | Support | Owner | Owner | Support | Support | Support | Support |
 | **Aniket Pathak** | Owner | Support | Support | Owner | Owner | Support | Support |
-| **Vedant Madne** | Support | Support | Support | Support | Support | Support | Owner |
-| **Akshay Y** | Support | Support | Support | Owner | Owner | Support | Support |
+| **Nipun Patlori** | Support | Owner | Owner | Support | Support | Support | Support |
 | **Saswataduity Bhuin** | Support | Support | Support | Support | Owner | Support | Support |
+| **Akshay Y** | Support | Support | Support | Owner | Owner | Support | Support |
+| **Narendra Singh** | Support | Support | Support | Support | Owner | Support | Owner |
 | **Sayan Bhattacharya** | Support | Support | Support | Support | Support | Support | Support |
-| **Narendra Singh** | Support | Support | Support | Support | Support | Support | Owner |
+| **Vedant Madne** | Support | Support | Support | Support | Support | Support | Owner |
 
 **Declaration:** We confirm that the above contribution details are accurate and verifiable through GitHub Insights, PR history, and submitted artifacts.
 
 **Team Lead Name:** Aniket Pathak
-**Date:** April 20, 2026
+**Date:** April 21, 2026
 
 ## Academic Integrity
 All analysis, code, and recommendations in this repository are the original work of the team listed above. Free-riding is tracked via GitHub Insights and pull request history. Any mismatch between the contribution matrix and actual commit history may result in individual grade adjustments.
