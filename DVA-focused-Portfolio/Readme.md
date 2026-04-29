@@ -3,7 +3,7 @@
 | :--- | :--- |
 | **Nipun Patlori** | [Nipun](https://nipun1803.github.io/Portfolio_Nipun/) |
 | **Aniket Pathak** |  |
-| **Saswataduity Bhuin** |   |
+| **Saswataduity Bhuin** | [Saswataduity](https://dva-portfolio-site.vercel.app/)  |
 | **Akshay Y** | |
 | **Narendra Singh** | [Narendra singh](https://cool-biscuit-871241.netlify.app/)|
 | **Sayan Bhattacharya** |   |
