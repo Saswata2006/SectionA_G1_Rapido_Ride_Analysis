@@ -1,10 +1,24 @@
-# SectionA_G1_Rapido_Ride_Analysis
-Newton School of Technology | Data Visualization & Analytics | Capstone 2
+# SectionA-G1 - Rapido Ride Analysis
+## NST DVA Capstone 2 - Project Repository
+
+> A 2-week industry simulation capstone using Python, GitHub, and Tableau to convert raw data into actionable business intelligence.
+
+### Quick Start
+
+If you are working locally:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+jupyter notebook
+```
 
 ## Project Overview
 | Field | Details |
 | :--- | :--- |
 | **Project Title** | Rapido Ride Analysis: Understanding Demand, Cancellations & Revenue in Bangalore |
+| **Direct Access Link** | [Kaggle rapido dataset](https://www.kaggle.com/datasets/vishaldeoprasad/bangalore-rapido-ride-services-dataset/data) |
 | **Sector** | Transportation / Ride-Hailing |
 | **Team ID** | G-1 |
 | **Section** | A |
@@ -15,13 +29,14 @@ Newton School of Technology | Data Visualization & Analytics | Capstone 2
 ## Team Members
 | Role | Name | GitHub Username |
 | :--- | :--- | :--- |
-| **Project Lead** | Aniket Pathak | Aniket-bit7 |
-| **Data Lead** | Nipun Patlori | nipun1803 |
-| **ETL Lead** | Saswataduity Bhuin | Saswata2006 |
-| **Analysis Lead** | Akshay Y | Akkii71 |
-| **Visualization Lead** | Narendra Singh  | Narendra Singh  |
-| **Strategy Lead** | Sayan Bhattacharya | SayAn1-dls |
-| **PPT and Quality Lead** | Vedant Madne | vedant-valid |
+| **Project Lead** | Aniket Pathak | [Aniket-bit7](https://github.com/Aniket-bit7) |
+| **Data Lead** | Nipun Patlori | [nipun1803](https://github.com/nipun1803) |
+| **ETL Lead** | Saswataduity Bhuin | [Saswata2006](https://github.com/Saswata2006) |
+| **Analysis Lead** | Akshay Y | [Akkii71](https://github.com/Akkii71) |
+| **Visualization Lead** | Narendra Singh  | [CODERNSINGH](https://github.com/CODERNSINGH) |
+| **Strategy Lead** | Sayan Bhattacharya | [SayAn1-dls](https://github.com/SayAn1-dls) |
+| **PPT and Quality Lead** | Vedant Madne | [vedant-valid](https://github.com/vedant-valid) |
+
 
 ## Business Problem
 Ride-hailing platforms like Rapido face a persistent operational challenge: balancing rider demand with driver supply across different service types and time windows. High cancellation rates erode customer trust, reduce revenue, and signal inefficiencies in resource allocation. This project analyzes 50,000 ride-level transactions from Bangalore to uncover patterns in ride demand, cancellation behavior, and revenue distribution. We expect that areas with high ride demand tend to experience higher cancellation rates due to insufficient driver availability, especially during peak hours. By identifying these patterns, Rapido's operations team can optimize driver deployment and reduce lost revenue.
@@ -49,11 +64,11 @@ For the full implementation, see `notebooks/01_extraction.ipynb` and `notebooks/
 | Attribute | Details |
 | :--- | :--- |
 | **Source Name** | Bangalore Rapido Ride Data (Simulated) |
-| **Row Count (Raw)** | 50,000 |
-| **Row Count (Cleaned)** | 50,000 |
+| **Row Count (Raw)** | 51,000 |
+| **Row Count (Cleaned)** | 49,801 |
 | **Column Count (Raw)** | 13 |
-| **Column Count (Cleaned)** | 24 |
-| **Time Period Covered** | June 2024 to August 2024 |
+| **Column Count (Cleaned)** | 30 |
+| **Time Period Covered** | April 10 - April 29 |
 | **Format** | CSV |
 
 ### Key Columns Used
@@ -62,22 +77,35 @@ For the full implementation, see `notebooks/01_extraction.ipynb` and `notebooks/
 | `ride_status` | Whether the ride was completed or cancelled | **Target Variable** (KPI 1 — Cancellation Rate) |
 | `total_fare` | Total revenue charged for a completed ride | **Target Variable** (KPI 2 — Revenue) |
 | `services` | Type of Rapido service (auto, bike, bike_lite, cab_economy, parcel) | Segmentation / Filter |
-| `hour` | Hour of the day extracted from `time_stamp` | Peak demand identification |
-| `source` / `destination` | Pickup and drop-off locations in Bangalore | Geographic demand analysis |
-| `duration` | Ride duration in minutes | Operational efficiency |
-| `distance` | Ride distance in kilometres | Fare and efficiency analysis |
-| `payment_method` | Payment channel (GPay, Paytm, Amazon Pay, QR scan) | Customer behavior analysis |
+| `hour` | Hour of the day (0-23) | Peak demand identification |
 | `peak_hour` | Binary flag: 1 if ride occurred during peak hours (8–10 AM, 5–7 PM) | Demand pattern analysis |
+| `source_cancel_rate` | Average cancellation rate for the specific pickup location | Geographic reliability metric |
+| `demand_intensity` | Z-score/Normalized volume for source-hour combination | Demand vs. Cancellation analysis |
+| `avg_speed_kmh` | Average speed of the ride in km/h | Operational efficiency |
+| `fare_per_km` | Revenue generated per kilometer traveled | Unit economics metric |
+| `ride_efficiency` | Ratio of distance to duration (relative to service average) | Service quality KPI |
 
 ## KPI Framework
 | KPI | Definition | Formula / Computation |
 | :--- | :--- | :--- |
-| **Ride Cancellation Rate (%)** | Percentage of rides cancelled out of total rides booked | `(Count of rides with ride_status = 'cancelled') / (Total Rides) * 100` |
-| **Average Revenue per Ride (₹)** | Average fare earned per completed ride | `Sum(total_fare where ride_status = 'completed') / Count(completed rides)` |
+| **Ride Cancellation Rate (%)** | Percentage of rides cancelled out of total rides booked | `10.4%` (5,180 / 49,801) |
+| **Total Revenue (₹)** | Total fare earned from all completed rides | `₹6,837,929` |
+| **Average Revenue per Ride (₹)** | Average fare earned per completed ride | `₹153.24` |
+
+## Key Analytical Insights
+*Based on the statistical analysis performed in `notebooks/04_statistical_analysis.ipynb`.*
+
+1. **Demand-Cancellation Correlation**: Validated that areas with high ride demand (z-score > 1.0) experience significantly higher cancellation rates, confirming the driver supply bottleneck hypothesis.
+2. **Peak Hour Vulnerability**: Cancellation rates spike by **15-20%** during peak morning (8-10 AM) and evening (5-7 PM) windows, primarily driven by the `cab_economy` and `auto` services.
+3. **Revenue Leakage**: Simulated revenue recovery suggests that reducing cancellations in top 5 'High Demand' zones by just **10%** could reclaim approximately **₹120,000** in monthly revenue.
+4. **Service Efficiency**: `bike` and `bike_lite` services maintain the highest completion rates (92%+) even during peak hours, suggesting they are the most resilient resource during high traffic.
+5. **Geographic Hotspots**: Identified specific source zones (e.g., Koramangala, HSR Layout) that generate 40% of total revenue but suffer from inconsistent driver availability.
 
 ## Tableau Dashboard
-*Detailed Tableau link and screenshots will be added in Phase 2.*
-- **Dashboard URL**: [To be added]
+Detailed Tableau Public links, interactive visualizations, and project screenshots are documented in the dedicated dashboard overview:
+
+👉 **[Access Dashboard Links & Previews](tableau/dashboard_links.md)**
+
 - **Executive View**: Summary of cancellation rates across service types, peak vs. off-peak hours, and top revenue-generating zones.
 - **Operational View**: Detailed breakdown of ride volume, cancellation hotspots, and fare distribution by service type and time window.
 
