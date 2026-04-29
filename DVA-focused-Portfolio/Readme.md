@@ -5,6 +5,6 @@
 | **Aniket Pathak** |  |
 | **Saswataduity Bhuin** |   |
 | **Akshay Y** | |
-| **Narendra Singh** |  |
+| **Narendra Singh** | [Narendra singh](https://cool-biscuit-871241.netlify.app/)|
 | **Sayan Bhattacharya** |   |
 | **Vedant Madne** |  |
