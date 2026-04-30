@@ -106,6 +106,7 @@ Detailed Tableau Public links, interactive visualizations, and project screensho
 
 👉 **[Access Dashboard Links & Previews](tableau/dashboard_links.md)**
 
+- **[Main Interactive Dashboard](https://public.tableau.com/app/profile/aniket.pathak/viz/Rapido_Rides_Analysis/Overview)**
 - **Executive View**: Summary of cancellation rates across service types, peak vs. off-peak hours, and top revenue-generating zones.
 - **Operational View**: Detailed breakdown of ride volume, cancellation hotspots, and fare distribution by service type and time window.
 
